@@ -80,7 +80,7 @@ exports.getAllProducts = async (req, res) => {
 // Update 
 exports.updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { name, quantity_on_hand } = req.body;
+  const { name, quantity_on_hand, components } = req.body;
   try {
     const prod = await product.findByPk(id);
 
