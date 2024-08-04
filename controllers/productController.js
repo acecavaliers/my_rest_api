@@ -1,6 +1,6 @@
 const Product = require('../db/models/product');
 const Component = require('../db/models/component');
-// const productComponent  = require('../db/models/productComponent');
+const productComponent  = require('../db/models/productComponent');
 
 exports.createProduct = async (req, res) => {
     const {name, quantity_on_hand, components  } =req.body;
@@ -21,12 +21,13 @@ exports.createProduct = async (req, res) => {
     // Add components to the productcomponents table
     if (components && components.length > 0) {
       components.forEach(async componentId => {
-        await productcomponents.create({
+        await productComponent.create({
           productId: productId,
           componentId: componentId,
         });
       });
     }
+    
 
     const result = newProduct.toJSON();           
 
@@ -43,7 +44,7 @@ exports.createProduct = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await Product.findAll({
-      include: [{ model: Component, through: 'ProductComponent' }]
+      // include: [{ model: Component, through: 'ProductComponent' }]
     });
     res.json(products);
   } catch (err) {

@@ -6,7 +6,9 @@ const supplierRouter = require('./routes/supplierRoutes');
 const componentRouter = require('./routes/componentRoutes');
 const catchAsync = require('./utils/catchAsync');
 const app = express();
+const cors = require('cors');
 
+app.use(cors());
 
 app.use(express.json());
 
