@@ -1,3 +1,4 @@
+const sequelize = require('../config/database');
 const component = require('../db/models/component');
 const componentsupplier = require('../db/models/componentSupplier');
 
@@ -41,8 +42,50 @@ exports.createComponent = async (req, res) => {
 // Get All
 exports.getAllComponents = async (req, res) => {
   try {
+    // const components = await component.findAll();
+    // res.json(components);
     const components = await component.findAll();
-    res.json(components);
+
+    const componentsWithProducts = await Promise.all(
+      components.map(async (component) => {
+        const products = await sequelize.query(
+          `SELECT p.id, p.name
+           FROM productComponent pc
+           INNER JOIN product p ON pc.productId = p.id
+           WHERE pc.componentId = :componentId`,
+          {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: { componentId: component.id }
+          }
+        );
+
+        component.dataValues.products = products;
+
+        return component;
+      })
+    );
+
+    const componentsWithSuppliers = await Promise.all(
+      componentsWithProducts.map(async (component) => {
+        const suppliers = await sequelize.query(
+          `SELECT s.id, s.name
+           FROM componentSupplier cs
+           INNER JOIN supplier s ON cs.supplierId = s.id
+           WHERE cs.componentId = :componentId`,
+          {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: { componentId: component.id }
+          }
+        );
+
+        component.dataValues.suppliers = suppliers;
+
+        return component;
+      })
+    );
+
+    res.json(componentsWithSuppliers);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

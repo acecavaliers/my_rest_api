@@ -4,7 +4,7 @@ const {
   DataTypes
 } = require('sequelize');
 const sequelize = require('../../config/database');
-const ComponentSupplier = sequelize.define('componentSupplier', {
+const componentSupplier = sequelize.define('componentSupplier', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -41,4 +41,4 @@ const ComponentSupplier = sequelize.define('componentSupplier', {
     modelName:'componentSupplier'
     });
 
-    module.exports = ComponentSupplier;
+    module.exports = componentSupplier;

@@ -1,10 +1,9 @@
 'use strict';
-const {
-  Model,
-  DataTypes
-} = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
-const Component = sequelize.define('component', {
+const productComponent = require('./productComponent');
+
+const component = sequelize.define('component', {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -13,15 +12,15 @@ const Component = sequelize.define('component', {
   },
   name: {
     type: DataTypes.STRING,
-    allowNull:false,
-    validate:{
-      notNull:{ msg: 'Component name cannot be null',},
-      notEmpty:{ msg: 'Component name cannot be empty',}
+    allowNull: false,
+    validate: {
+      notNull: { msg: 'Component name cannot be null' },
+      notEmpty: { msg: 'Component name cannot be empty' }
     }
   },
   description: {
     type: DataTypes.STRING,
-    allowNull:true,
+    allowNull: true
   },
   createdAt: {
     allowNull: false,
@@ -34,21 +33,18 @@ const Component = sequelize.define('component', {
   deletedAt: {
     type: DataTypes.DATE
   }
-},{
-  paranoid:true,
-  freezeTableName:true,
-  modelName:'component'
+}, {
+  paranoid: true,
+  freezeTableName: true,
+  modelName: 'component'
 });
-Component.associate = models => {
-  Component.belongsToMany(models.Product, {
-    through: models.ProductComponent,
+
+component.associate = (models) => {
+  component.belongsToMany(models.product, {
+    through: models.productComponent,
     foreignKey: 'componentId',
-    otherKey: 'productId'
-  });
-  Component.belongsToMany(models.Supplier, {
-    through: models.ComponentSupplier,
-    foreignKey: 'componentId',
-    otherKey: 'supplierId'
+    as: 'products'
   });
 };
-module.exports=Component;
+
+module.exports = component;

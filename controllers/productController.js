@@ -1,11 +1,15 @@
-const Product = require('../db/models/product');
-const Component = require('../db/models/component');
+const product = require('../db/models/product');
+const component = require('../db/models/component');
 const productComponent  = require('../db/models/productComponent');
+const sequelize = require('../config/database');
+const { SELECT } = require('sequelize/lib/query-types');
+
+// const { product, component, productComponent } = require('../db/models');
 
 exports.createProduct = async (req, res) => {
     const {name, quantity_on_hand, components  } =req.body;
   try {
-    const newProduct = await Product.create({
+    const newProduct = await product.create({
         name:name,
         quantity_on_hand:quantity_on_hand,
     });
@@ -43,10 +47,32 @@ exports.createProduct = async (req, res) => {
 // Get all
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.findAll({
-      // include: [{ model: Component, through: 'ProductComponent' }]
+    // const products = await product.findAll();
+    // res.json(products);
+    const products = await product.findAll();
+    
+    const promises = products.map(async (product) => {
+      
+      const components = await sequelize.query(
+        `SELECT c.id , c.name , c.description 
+         FROM productComponent pc
+         INNER JOIN component c ON pc.componentId = c.id
+         WHERE pc.productId = :productId`,
+        {
+          type: sequelize.QueryTypes.SELECT,
+          replacements: { productId: product.id }
+        }
+      );
+
+      product.dataValues.components = components;
+      
+      return product;
     });
-    res.json(products);
+
+    const productsWithComponents = await Promise.all(promises);
+
+    res.json(productsWithComponents);
+   
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -56,7 +82,7 @@ exports.updateProduct = async (req, res) => {
   const { id } = req.params;
   const { name, quantity_on_hand } = req.body;
   try {
-    const prod = await Product.findByPk(id);
+    const prod = await product.findByPk(id);
 
     if (!prod) {
       return res.status(404).json({
@@ -84,7 +110,7 @@ exports.updateProduct = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    const prod = await Product.findByPk(id);
+    const prod = await product.findByPk(id);
 
     if (!prod) {
       return res.status(404).json({

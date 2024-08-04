@@ -1,10 +1,9 @@
 'use strict';
-const {
-  Model,
-  DataTypes
-} = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
-const Product = sequelize.define('product', {
+const productComponent = require('./productComponent');
+
+const product = sequelize.define('product', {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -13,20 +12,19 @@ const Product = sequelize.define('product', {
   },
   name: {
     type: DataTypes.STRING,
-    allowNull:false,
-    validate:{
-      notNull:{ msg: 'Product name cannot be null',},
-      notEmpty:{ msg: 'Product name cannot be empty',}
+    allowNull: false,
+    validate: {
+      notNull: { msg: 'Product name cannot be null' },
+      notEmpty: { msg: 'Product name cannot be empty' }
     }
   },
-  quantity_on_hand:{
+  quantity_on_hand: {
     type: DataTypes.INTEGER,
-    allowNull:false,
-    validate:{
-      notNull:{ msg: 'Quantity on hand cannot be null',},
-      notEmpty:{ msg: 'Quantity on hand cannot be empty',}
+    allowNull: false,
+    validate: {
+      notNull: { msg: 'Quantity on hand cannot be null' },
+      notEmpty: { msg: 'Quantity on hand cannot be empty' }
     }
-
   },
   createdAt: {
     allowNull: false,
@@ -39,17 +37,18 @@ const Product = sequelize.define('product', {
   deletedAt: {
     type: DataTypes.DATE
   }
-},{
-  paranoid:true,
-  freezeTableName:true,
-  modelName:'product'
+}, {
+  paranoid: true,
+  freezeTableName: true,
+  modelName: 'product'
 });
-Product.associate = models => {
-  Product.belongsToMany(models.Component, {
-    through: models.ProductComponent,
+
+product.associate = (models) => {
+  product.belongsToMany(models.component, {
+    through: models.productComponent,
     foreignKey: 'productId',
-    otherKey: 'componentId'
+    as: 'components'
   });
 };
 
-module.exports=Product;
+module.exports = product;

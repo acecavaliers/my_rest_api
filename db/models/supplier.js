@@ -4,7 +4,7 @@ const {
   DataTypes
 } = require('sequelize');
 const sequelize = require('../../config/database');
-const Supplier = sequelize.define('supplier', {
+const supplier = sequelize.define('supplier', {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -35,11 +35,11 @@ const Supplier = sequelize.define('supplier', {
   freezeTableName:true,
   modelName:'supplier'
 });
-Supplier.associate = (models) => {
-  Supplier.belongsToMany(models.Component, {
-    through: models.ComponentSupplier,
+supplier.associate = (models) => {
+  supplier.belongsToMany(models.component, {
+    through: models.componentSupplier,
     foreignKey: 'supplierId',
     otherKey: 'componentId'
   });
 }
-module.exports = Supplier;
+module.exports = supplier;

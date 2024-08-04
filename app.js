@@ -8,6 +8,9 @@ const catchAsync = require('./utils/catchAsync');
 const app = express();
 const cors = require('cors');
 
+
+
+
 app.use(cors());
 
 app.use(express.json());
@@ -41,6 +44,8 @@ app.use((err, req, res, next)=>{
 });
 
 const PORT = process.env.APP_PORT || 4000;
+
+
 
 app.listen(PORT, () => {
     console.log('SERVER RUNNING', PORT);

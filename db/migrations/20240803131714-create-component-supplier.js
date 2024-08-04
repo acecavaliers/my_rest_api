@@ -12,14 +12,14 @@ module.exports = {
       componentId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'component', // Name of the target model
+          model: 'component', 
           key: 'id',
         }
       },
       supplierId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'supplier', // Name of the target model
+          model: 'supplier', 
           key: 'id',
         }
       },

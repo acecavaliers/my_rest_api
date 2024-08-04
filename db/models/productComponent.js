@@ -1,10 +1,8 @@
 'use strict';
-const {
-  Model,
-  DataTypes
-} = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
-const ProductComponent = sequelize.define('productComponent', {
+
+const productComponent = sequelize.define('productComponent', {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -15,16 +13,16 @@ const ProductComponent = sequelize.define('productComponent', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'product', // Name of the target model
-      key: 'id',
+      model: 'product',
+      key: 'id'
     }
   },
   componentId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'component', // Name of the target model
-      key: 'id',
+      model: 'component',
+      key: 'id'
     }
   },
   createdAt: {
@@ -35,12 +33,10 @@ const ProductComponent = sequelize.define('productComponent', {
     allowNull: false,
     type: DataTypes.DATE
   }
-},
-{
-  paranoid:true,
-  freezeTableName:true,
-  modelName:'productComponent'
+}, {
+  paranoid: true,
+  freezeTableName: true,
+  modelName: 'productComponent'
 });
 
-
-module.exports=ProductComponent;
+module.exports = productComponent;
