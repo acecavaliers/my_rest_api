@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ComponentSuppliers', {
+    await queryInterface.createTable('componentSupplier', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,10 +10,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       componentId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'component', // Name of the target model
+          key: 'id',
+        }
       },
       supplierId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'supplier', // Name of the target model
+          key: 'id',
+        }
       },
       createdAt: {
         allowNull: false,
@@ -26,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ComponentSuppliers');
+    await queryInterface.dropTable('componentSupplier');
   }
 };

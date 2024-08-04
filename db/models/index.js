@@ -1,57 +1,59 @@
-// const Product = require('./product');
-// const Component = require('./component');
-// const Supplier = require('./supplier');
+const Product = require('./product');
+const Component = require('./component');
+const ProductComponent = require('./productComponent');
 
-// // Define relationships
-// Product.hasMany(Component, { as: 'components' });
-// Component.belongsTo(Product, { foreignKey: 'productId', as: 'product' });
+// Initialize associations
+Product.associate({ Component, ProductComponent });
+Component.associate({ Product, ProductComponent });
 
-// Component.belongsToMany(Supplier, { through: 'ComponentSupplier' });
-// Supplier.belongsToMany(Component, { through: 'ComponentSupplier' });
-
-// module.exports = { Product, Component, Supplier };
+// Sync models
+sequelize.sync();
 
 
-'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../../config/config.js')[env];
-const db = {};
+// 'use strict';
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+// const fs = require('fs');
+// const path = require('path');
+// const Sequelize = require('sequelize');
+// const process = require('process');
+// const basename = path.basename(__filename);
+// const env = process.env.NODE_ENV || 'development';
+// const config = require(__dirname + '/../../config/config.js')[env];
+// const db = {};
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-    );
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
 
-module.exports = db;
+// let sequelize;
+// if (config.use_env_variable) {
+//   sequelize = new Sequelize(process.env[config.use_env_variable], config);
+// } else {
+//   sequelize = new Sequelize(config.database, config.username, config.password, config);
+// }
+
+// fs
+//   .readdirSync(__dirname)
+//   .filter(file => {
+//     return (
+//       file.indexOf('.') !== 0 &&
+//       file !== basename &&
+//       file.slice(-3) === '.js' &&
+//       file.indexOf('.test.js') === -1
+//     );
+//   })
+//   .forEach(file => {
+//     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+//     db[model.name] = model;
+//   });
+
+// Object.keys(db).forEach(modelName => {
+//   if (db[modelName].associate) {
+//     db[modelName].associate(db);
+//   }
+// });
+
+// db.sequelize = sequelize;
+// db.Sequelize = Sequelize;
+
+// module.exports = db;

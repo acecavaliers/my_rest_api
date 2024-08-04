@@ -1,24 +1,44 @@
 'use strict';
 const {
-  Model
+  Model,
+  DataTypes
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class ComponentSupplier extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  ComponentSupplier.init({
-    componentId: DataTypes.INTEGER,
-    supplierId: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'ComponentSupplier',
-  });
-  return ComponentSupplier;
-};
+const sequelize = require('../../config/database');
+const ComponentSupplier = sequelize.define('componentSupplier', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
+      componentId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'component', // Name of the target model
+          key: 'id',
+        }
+      },
+      supplierId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'supplier', // Name of the target model
+          key: 'id',
+        }
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE
+      }
+    },{
+      paranoid:true,
+    freezeTableName:true,
+    modelName:'componentSupplier'
+    });
+
+    module.exports = ComponentSupplier;

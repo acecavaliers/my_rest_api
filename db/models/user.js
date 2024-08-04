@@ -12,14 +12,6 @@ module.exports = sequelize.define('user',{
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  userType: {
-    type: DataTypes.ENUM('0','1','2'),
-    allowNull:false,
-    validate:{
-      notNull:{ msg: 'UserTye cannot be null',},
-      notEmpty:{ msg: 'UserTye cannot be empty',}
-    }
-  },
   firstName: {
     type: DataTypes.STRING,
     allowNull:false,

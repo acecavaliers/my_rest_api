@@ -6,17 +6,12 @@ const generateToken = (payload) =>{
     });
 }
 exports.addUser = async (req, res) => {
-    const {userType, firstName, lastName, email, password} =req.body;
+    const { firstName, lastName, email, password} =req.body;
     try {
-        if(!['1','2'].includes(userType)){
-           return res.status(400).json({
-                status:'fail',
-                message: 'Invalid user type'
-            });
-        } 
+        
         
         const newUser = await user.create({
-            userType:userType,
+          
             firstName:firstName,
             lastName:lastName,
             email:email,
